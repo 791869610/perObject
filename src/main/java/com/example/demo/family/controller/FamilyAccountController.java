@@ -4,7 +4,11 @@ import com.example.demo.base.json.JsonData;
 import com.example.demo.family.service.FamilyAccountService;
 import com.example.demo.vo.family.request.FamilyAccountVO;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpRequest;
 import org.springframework.web.bind.annotation.*;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
 /**
  * @program: prisondemo
@@ -26,19 +30,26 @@ public class FamilyAccountController {
      * @Date 2018/12/12 15:07
      */
     @PostMapping("register")
-    public JsonData register(FamilyAccountVO familyAccountVO) {
-        familyAccountService.register(familyAccountVO);
+    public JsonData register(HttpServletRequest request,FamilyAccountVO familyAccountVO) {
+//        familyAccountService.register(familyAccountVO);
+        System.out.println("request"+request);
+        System.out.println("session"+request.getSession());
+        System.out.println("verifyCode"+request.getSession().getAttribute("verifyCode"));
         return JsonData.ok();
     }
 
     /**
-     * @description 发送短信验证码(设置有效期5分钟)(家属注册)
+     * @description 发送短信验证码(设置有效期2分钟)(家属注册)
      * @author jiahao
      * @Date 2018/12/12 15:07
      */
     @PostMapping("sendSms")
-    public JsonData sendSms(String phone) {
-        String verifyCode = familyAccountService.sendSms(phone);
+    public JsonData sendSms(HttpServletRequest request, String phone) {
+//        String verifyCode = familyAccountService.sendSms(phone);
+        String verifyCode = phone;
+        HttpSession session = request.getSession();
+        session.setAttribute("verifyCode",verifyCode);
+        session.setMaxInactiveInterval(120);
         return JsonData.ok(verifyCode);
     }
 
@@ -99,6 +110,12 @@ public class FamilyAccountController {
     @GetMapping("findFamilyAccountListPagination")
     public JsonData findFamilyAccountListPagination(FamilyAccountVO familyAccountVO) {
         familyAccountService.findFamilyAccountListPagination(familyAccountVO);
+        return JsonData.ok();
+    }
+
+    @PostMapping("test")
+    public JsonData test() {
+        familyAccountService.test();
         return JsonData.ok();
     }
 }

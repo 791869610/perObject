@@ -17,6 +17,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.ValueOperations;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Date;
 import java.util.List;
@@ -65,7 +66,7 @@ public class FamilyAccountServiceImpl implements FamilyAccountService {
     @Override
     public String sendSms(String phone) {
         String verifyCode = msg.sendSms(phone);
-        valueOperations.set(phone,"verifyCode",60 * 60 * 2, TimeUnit.SECONDS);
+        valueOperations.set(phone,verifyCode,60 * 60 * 2, TimeUnit.SECONDS);
         return verifyCode;
     }
 
@@ -123,10 +124,11 @@ public class FamilyAccountServiceImpl implements FamilyAccountService {
      */
     @Override
     public PageInfo<List<ResponseFamilyAccountVO>> findFamilyAccountListPagination(FamilyAccountVO familyAccountVO) {
-        PageHelper.startPage(familyAccountVO.getPageNum(),familyAccountVO.getPageSize());
-        List<ResponseFamilyAccountVO> responseFamilyAccountVOS = familyAccountMapper.selectFamilyAccountList(familyAccountVO);
-        PageInfo pageInfo = new PageInfo(responseFamilyAccountVOS);
-        return pageInfo;
+//        PageHelper.startPage(familyAccountVO.getPageNum(),familyAccountVO.getPageSize());
+//        List<ResponseFamilyAccountVO> responseFamilyAccountVOS = familyAccountMapper.selectFamilyAccountList(familyAccountVO);
+//        PageInfo pageInfo = new PageInfo(responseFamilyAccountVOS);
+//        return pageInfo;
+        return null;
     }
 
     /**
@@ -137,8 +139,9 @@ public class FamilyAccountServiceImpl implements FamilyAccountService {
      */
     @Override
     public List<ResponseFamilyAccountVO> findFamilyAccountList(FamilyAccountVO familyAccountVO) {
-        List<ResponseFamilyAccountVO> responseFamilyAccountVOS = familyAccountMapper.selectFamilyAccountList(familyAccountVO);
-        return responseFamilyAccountVOS;
+//        List<ResponseFamilyAccountVO> responseFamilyAccountVOS = familyAccountMapper.selectFamilyAccountList(familyAccountVO);
+//        return responseFamilyAccountVOS;
+        return null;
     }
 
     /**
@@ -149,10 +152,6 @@ public class FamilyAccountServiceImpl implements FamilyAccountService {
      */
     @Override
     public ResponseFamilyAccountVO findFamilyAccountById(Long id) {
-        FamilyAccount build = FamilyAccount.builder()
-                .id(id)
-                .isDel(IsDeleteEnum.DELETE.getCode())
-                .build();
         familyAccountMapper.selectByPrimaryKey(id);
         return null;
     }
@@ -171,5 +170,17 @@ public class FamilyAccountServiceImpl implements FamilyAccountService {
         } else {
             return null;
         }
+    }
+
+    @Transactional
+    public void test(){
+        FamilyAccount build = FamilyAccount.builder()
+                .id(IdUtil.generateId())
+                .isDel(IsDeleteEnum.DELETE.getCode())
+                .build();
+        System.out.println("build"+build);
+        System.out.println("familyAccountMapper"+familyAccountMapper);
+        familyAccountMapper.insertSelective(build);
+        throw new BusinessException(BusFamilyErrorCode.VERIFY_CODE_ERROR);
     }
 }

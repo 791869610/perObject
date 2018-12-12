@@ -77,4 +77,6 @@ public interface FamilyAccountService {
      */
     ResponseFamilyAccountVO findFamilyAccountById(Long id);
 
+    void test();
+
 }

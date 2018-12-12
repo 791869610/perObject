@@ -18,26 +18,26 @@
     <result column="reserved" property="reserved" jdbcType="VARCHAR" />
   </resultMap>
 
-  <select id="selectFamilyAccountList" resultMap="BaseResultMap">
-    SELECT
-    id,
-    phone,
-    password,
-    email,
-    prison_partition_id,
-    prisoner_name,
-    prisoner_number,
-    is_del,
-    create_time,
-    update_time,
-    reserved
-    FROM
-    bus_family_account
-    <where>
-      is_del = 2
-      <if test="id!=null">
-        and id = #{id}
-      </if>
-    </where>
-  </select>
+  <!--<select id="selectFamilyAccountList" resultMap="BaseResultMap">-->
+    <!--SELECT-->
+    <!--id,-->
+    <!--phone,-->
+    <!--password,-->
+    <!--email,-->
+    <!--prison_partition_id,-->
+    <!--prisoner_name,-->
+    <!--prisoner_number,-->
+    <!--is_del,-->
+    <!--create_time,-->
+    <!--update_time,-->
+    <!--reserved-->
+    <!--FROM-->
+    <!--bus_family_account-->
+    <!--<where>-->
+      <!--is_del = 2-->
+      <!--<if test="id!=null">-->
+        <!--and id = #{id}-->
+      <!--</if>-->
+    <!--</where>-->
+  <!--</select>-->
 </mapper>

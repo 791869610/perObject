@@ -19,5 +19,5 @@ public interface FamilyAccountMapper extends MyBaseMapper<FamilyAccount> {
      * @author jiahao
      * @Date 2018/12/12 14:59
      */
-    List<ResponseFamilyAccountVO> selectFamilyAccountList(FamilyAccountVO familyAccountVO);
+//    List<ResponseFamilyAccountVO> selectFamilyAccountList(FamilyAccountVO familyAccountVO);
 }
